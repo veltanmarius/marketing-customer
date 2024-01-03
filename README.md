@@ -1,5 +1,5 @@
-# spring-boot-classic-crud
-Customer data (backend part) service
+# marketing-customer
+Customer data (backend part) service that contains minimal operations
 
 ### Customer Data Model
 - firstname
