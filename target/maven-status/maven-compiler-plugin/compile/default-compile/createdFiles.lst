@@ -1,0 +1,16 @@
+ro/veltanmarius/mkcustomer/config/OpenApiConfig.class
+ro/veltanmarius/mkcustomer/exceptions/ObjectNotFoundException.class
+ro/veltanmarius/mkcustomer/util/GlobalControllerExceptionHandler.class
+ro/veltanmarius/mkcustomer/model/mapper/CustomerMapper.class
+ro/veltanmarius/mkcustomer/controller/CustomerController.class
+ro/veltanmarius/mkcustomer/repository/CustomerRepository.class
+ro/veltanmarius/mkcustomer/model/entity/CustomerEntity.class
+ro/veltanmarius/mkcustomer/model/CustomerMutableData.class
+ro/veltanmarius/mkcustomer/exceptions/InvalidInputException.class
+ro/veltanmarius/mkcustomer/service/CustomerService.class
+ro/veltanmarius/mkcustomer/util/HttpErrorInfo.class
+ro/veltanmarius/mkcustomer/service/CustomerServiceImpl.class
+ro/veltanmarius/mkcustomer/MarketingCustomerApplication.class
+ro/veltanmarius/mkcustomer/model/Customer.class
+ro/veltanmarius/mkcustomer/model/entity/AbstractEntity.class
+ro/veltanmarius/mkcustomer/model/mapper/CustomerMapperImpl.class

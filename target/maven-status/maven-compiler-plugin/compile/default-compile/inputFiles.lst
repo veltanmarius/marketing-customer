@@ -1,0 +1,15 @@
+/Users/veltanm/_Dev/github/marketing-customer/src/main/java/ro/veltanmarius/mkcustomer/util/GlobalControllerExceptionHandler.java
+/Users/veltanm/_Dev/github/marketing-customer/src/main/java/ro/veltanmarius/mkcustomer/model/CustomerMutableData.java
+/Users/veltanm/_Dev/github/marketing-customer/src/main/java/ro/veltanmarius/mkcustomer/config/OpenApiConfig.java
+/Users/veltanm/_Dev/github/marketing-customer/src/main/java/ro/veltanmarius/mkcustomer/MarketingCustomerApplication.java
+/Users/veltanm/_Dev/github/marketing-customer/src/main/java/ro/veltanmarius/mkcustomer/service/CustomerServiceImpl.java
+/Users/veltanm/_Dev/github/marketing-customer/src/main/java/ro/veltanmarius/mkcustomer/repository/CustomerRepository.java
+/Users/veltanm/_Dev/github/marketing-customer/src/main/java/ro/veltanmarius/mkcustomer/model/Customer.java
+/Users/veltanm/_Dev/github/marketing-customer/src/main/java/ro/veltanmarius/mkcustomer/model/entity/AbstractEntity.java
+/Users/veltanm/_Dev/github/marketing-customer/src/main/java/ro/veltanmarius/mkcustomer/exceptions/InvalidInputException.java
+/Users/veltanm/_Dev/github/marketing-customer/src/main/java/ro/veltanmarius/mkcustomer/controller/CustomerController.java
+/Users/veltanm/_Dev/github/marketing-customer/src/main/java/ro/veltanmarius/mkcustomer/model/entity/CustomerEntity.java
+/Users/veltanm/_Dev/github/marketing-customer/src/main/java/ro/veltanmarius/mkcustomer/util/HttpErrorInfo.java
+/Users/veltanm/_Dev/github/marketing-customer/src/main/java/ro/veltanmarius/mkcustomer/service/CustomerService.java
+/Users/veltanm/_Dev/github/marketing-customer/src/main/java/ro/veltanmarius/mkcustomer/exceptions/ObjectNotFoundException.java
+/Users/veltanm/_Dev/github/marketing-customer/src/main/java/ro/veltanmarius/mkcustomer/model/mapper/CustomerMapper.java

@@ -1,0 +1,82 @@
+springdoc:
+  swagger-ui.path: /openapi/swagger-ui.html
+  api-docs.path: /openapi/v3/api-docs
+  packagesToScan: ro.veltanmarius.mkcustomer
+  pathsToMatch: /**
+
+api:
+  common:
+    version: 1.0.0
+    title: Customer Sample API
+    description: Description of the Customer API
+    termsOfService: No Terms of Service
+    license: No Licence
+    licenseUrl: No-License-URL
+
+    externalDocDesc: No Wiki page
+    externalDocUrl: No Wiki URL
+    contact:
+      name: Marius
+      url: marius.ro
+      email: marius@mail.com
+
+  responseCodes:
+    ok.description: OK
+    badRequest.description: Bad Request, invalid format of the request. See response message for more information
+    notFound.description: Not found, the specified id does not exist
+    unprocessableEntity.description: Unprocessable entity, input parameters caused the processing to fail. See response message for more information
+
+  customer-info:
+
+    get-customer:
+      description: Returns a view of the specified customer id
+      notes: |
+        # Normal response
+        If the requested customer id is found the method will return all Customer information
+
+        # Expected partial and error responses
+        1. If no customer information is found, a **404 - Not Found** error will be returned
+    get-customers-all:
+      description: Retrieve all customers
+      notes: |
+        # Normal response
+        Get all customers from the database
+    get-customers-find:
+      description: Retrieve all customers by first name or last name
+      notes: |
+        # Normal response
+        Get all customers from the database with exact first name or last name
+
+    create-customer:
+      description: Creates a new customer
+      notes: |
+        # Normal response
+        The customer information posted to the API will be persisted.
+
+        # Expected error responses
+        1. If customer's fields are not correct, an **400 - Bad Request** error will be returned
+        2. If customer's email or all address fields are not set, an **422 - Unprocessable Entity** error will be returned
+
+    update-customer:
+      description: Update a customer email or address data
+      notes: |
+        # Normal response
+        The customer information posted to the API will be persisted.
+
+        # Expected error responses
+        1. If customer's fields are not correct, an **400 - Bad Request** error will be returned
+        2. If customer's email or all address fields are not set, an **422 - Unprocessable Entity** error will be returned
+spring:
+  h2:
+    console.enabled: true
+    path: /h2-console
+    settings.trace: true
+    settings.web-allow-others: true
+
+server.port: 8080
+server.error.include-message: always
+
+logging:
+  level:
+    root: INFO
+    ro.veltanmarius: DEBUG
