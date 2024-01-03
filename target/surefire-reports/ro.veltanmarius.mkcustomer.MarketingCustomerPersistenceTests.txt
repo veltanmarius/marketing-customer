@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: ro.veltanmarius.mkcustomer.MarketingCustomerPersistenceTests
--------------------------------------------------------------------------------
-Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.71 s - in ro.veltanmarius.mkcustomer.MarketingCustomerPersistenceTests
