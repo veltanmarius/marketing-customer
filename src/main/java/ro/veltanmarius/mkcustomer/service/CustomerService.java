@@ -15,4 +15,6 @@ public interface CustomerService {
     List<Customer> getAllCustomers();
 
     List<Customer> getAllCustomers(String firstName, String lastName);
+
+    List<Customer> searchAllCustomers(String firstName, String lastName);
 }

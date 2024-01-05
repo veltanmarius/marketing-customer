@@ -2,8 +2,8 @@
 Customer data (backend part) service that contains minimal operations
 
 ### Customer Data Model
-- firstname
-- lastname
+- first name
+- last name
 - age
 - email address
 - current living address:
@@ -13,9 +13,9 @@ Customer data (backend part) service that contains minimal operations
   - city
   - country
 
-Mandatory fields: firstname, lastname, email or address (all fields)
-Constraints: age > 18 and above
-Technical limitation for other fields: not set
+Mandatory fields: first name, last name, email or address (all fields)
+Constraints: age > 18 and above.
+Technical limitation for other fields: not set.
 
 ### Exposed REST API
 - Add
@@ -25,12 +25,12 @@ Technical limitation for other fields: not set
 - No delete
 - Search by first name or last name
 
-### Tech stack
+## Tech stack
 - Java 17 or above
 - Spring Boot 3.x
 - Build system: maven or gradle
 - Docker container
 - CI/CD pipeline
 - Well design production ready application
-- Persistence in an SQL (in memory DB)
-- Maximum 10k customers
+- Persistence in an SQL DB (in memory DB)
+- Maximum 10k customers.

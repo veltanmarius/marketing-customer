@@ -8,6 +8,8 @@ import static reactor.core.publisher.Mono.just;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,6 +22,8 @@ import ro.veltanmarius.mkcustomer.service.CustomerService;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 class MarketingCustomerApplicationTests {
+
+	private static final Logger LOG = LoggerFactory.getLogger(MarketingCustomerApplicationTests.class);
 
 	private static final int CUSTOMER_ID_OK = 1;
 	private static final int CUSTOMER_ID_NOT_FOUND = 2;
@@ -42,25 +46,65 @@ class MarketingCustomerApplicationTests {
 	}
 
 	@Test
-	void contextLoads() {}
+	void contextLoads() {
+		LOG.debug("contextLoads: Tests are configured correctly");
+	}
 
 	@Test
-	void createCustomer1() {
-		Customer customer = new Customer(1, "fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
-
+	void createCustomerOK() {
+		Customer customer;
+		customer = new Customer(1, "fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
+		postAndVerifyProduct(customer, OK);
+		customer = new Customer(1, "fn ", "ln ", 18, "", "st", "no", "zp", "ci", "co");
+		postAndVerifyProduct(customer, OK);
+		customer = new Customer(1, " FN", " LN", 18, "e@x.ro", " ", "", "", "", "");
 		postAndVerifyProduct(customer, OK);
 	}
 
 	@Test
-	void createCustomer2() {
-		Customer customer = new Customer(2, "fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
-
-		postAndVerifyProduct(customer, OK);
+	void createCustomerMandatoryFieldsMissing() {
+		Customer customer;
+		customer = new Customer(2, " ", " ", 18, "", "", "", "", "", "");
+		postAndVerifyProduct(customer, BAD_REQUEST);
+		customer = new Customer(2, "fn", " ", 18, "", "", "", "", "", "");
+		postAndVerifyProduct(customer, BAD_REQUEST);
+		customer = new Customer(2, "fn", "ln", 18, "", "", "", "", "", "");
+		postAndVerifyProduct(customer, UNPROCESSABLE_ENTITY);
+		customer = new Customer(2, "fn", "ln", 18, "", "st", "", "", "", "");
+		postAndVerifyProduct(customer, UNPROCESSABLE_ENTITY);
+		customer = new Customer(2, "fn", "ln", 18, "", "st", "no", "", "", "");
+		postAndVerifyProduct(customer, UNPROCESSABLE_ENTITY);
+		customer = new Customer(2, "fn", "ln", 18, "", "st", "no", "zp", "", "");
+		postAndVerifyProduct(customer, UNPROCESSABLE_ENTITY);
+		customer = new Customer(2, "fn", "ln", 18, "", "st", "no", "zp", "ci", "");
+		postAndVerifyProduct(customer, UNPROCESSABLE_ENTITY);
 	}
 
+	@Test
+	void createCustomerConstraintsFailed() {
+		Customer customer;
+		customer = new Customer(1, "fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
+		postAndVerifyProduct(customer, OK);
+		customer = new Customer(1, "fn", "ln", 18, "blabla", "st", "no", "zp", "ci", "co");
+		postAndVerifyProduct(customer, BAD_REQUEST);
+		customer = new Customer(1, "fn", "ln", 17, "e@x.ro", "st", "no", "zp", "ci", "co");
+		postAndVerifyProduct(customer, BAD_REQUEST);
+		customer = new Customer(1, "fn", "ln", -1, "e@x.ro", "st", "no", "zp", "ci", "co");
+		postAndVerifyProduct(customer, BAD_REQUEST);
+	}
+
+	@Test
+	void updateCustomerOK() {
+		Customer customer;
+		customer = new Customer(1, "fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
+		puAndVerifyProduct(customer, OK);
+		customer = new Customer(1, "fn ", "ln ", 18, "", "st", "no", "zp", "ci", "co");
+		puAndVerifyProduct(customer, OK);
+		customer = new Customer(1, " FN", " LN", 18, "e@x.ro", " ", "", "", "", "");
+		puAndVerifyProduct(customer, OK);
+	}
 	@Test
 	void getCustomerById() {
-
 		getAndVerifyProduct(CUSTOMER_ID_OK, OK)
 				.jsonPath("$.id").isEqualTo(CUSTOMER_ID_OK);
 	}
@@ -97,4 +141,11 @@ class MarketingCustomerApplicationTests {
 				.expectStatus().isEqualTo(expectedStatus);
 	}
 
+	private void puAndVerifyProduct(Customer customer, HttpStatus expectedStatus) {
+		client.put()
+				.uri("/marketing/customers")
+				.body(just(customer), Customer.class)
+				.exchange()
+				.expectStatus().isEqualTo(expectedStatus);
+	}
 }

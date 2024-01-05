@@ -4,7 +4,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "customer")
+@Table(name = "customer",
+        indexes = {
+            @Index(name = "index_fn", columnList = "first_name"),
+            @Index(name = "index_ln", columnList = "last_name")
+        })
 public class CustomerEntity extends AbstractEntity {
     @Id
     @GeneratedValue

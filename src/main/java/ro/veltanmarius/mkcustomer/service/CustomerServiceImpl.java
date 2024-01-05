@@ -16,13 +16,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class CustomerServiceImpl implements CustomerService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
-    private CustomerMapper customerMapper;
+    private final CustomerMapper customerMapper;
 
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
     @Autowired
     public CustomerServiceImpl(CustomerMapper customerMapper, CustomerRepository customerRepository) {
@@ -30,16 +31,18 @@ public class CustomerServiceImpl implements CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    @Transactional
+
     @Override
+    @Transactional
     public Customer createCustomer(Customer customer) {
         CustomerEntity customerEntity = customerRepository.save(customerMapper.apiToEntity(customer));
         LOG.debug("createCustomer: customer entity with ID {} was created for {} {}", customerEntity.getId(), customer.getFirstName(), customer.getLastName());
         return customerMapper.entityToApi(customerEntity);
     }
 
-    @Transactional
+
     @Override
+    @Transactional
     public Customer updateCustomerEmailAndAddress(CustomerMutableData customerMutableData) {
         CustomerEntity customerEntity = customerRepository.findById(customerMutableData.getId())
                 .orElseThrow(() -> new ObjectNotFoundException("Customer does not exist for ID " + customerMutableData.getId()));
@@ -74,4 +77,8 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findCustomerByFirstNameOrLastName(firstName, lastName).stream().map(customerMapper::entityToApi).toList();
     }
 
+    @Override
+    public List<Customer> searchAllCustomers(String firstName, String lastName) {
+        return customerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(firstName, lastName).stream().map(customerMapper::entityToApi).toList();
+    }
 }

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import ro.veltanmarius.mkcustomer.exceptions.InvalidInputException;
 import ro.veltanmarius.mkcustomer.exceptions.ObjectNotFoundException;
@@ -24,7 +25,7 @@ public class CustomerController {
 
     private static final Logger LOG = LoggerFactory.getLogger(CustomerController.class);
 
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
     @Autowired
     public CustomerController(CustomerService customerService) {
@@ -33,7 +34,6 @@ public class CustomerController {
 
     /**
      * Sample usage, see below.
-     *
      * curl -X POST $HOST:$PORT/marketing/customers \
      *   -H "Content-Type: application/json" --data \
      *   '{"customerId":123,"firstName":"my firstName","lastName": "my lastName", "email":"contact@email.com"}'
@@ -54,13 +54,12 @@ public class CustomerController {
         if (!body.hasValidAddress()) {
             throw new InvalidInputException("Invalid customer!");
         }
-        Customer customer = customerService.createCustomer(body);
+        customerService.createCustomer(body);
         LOG.debug("createCustomer: customer entity was created, ID: {}", body.getId());
     }
 
     /**
      * Sample usage, see below.
-     *
      * curl -X PUT $HOST:$PORT/marketing/customers \
      *   -H "Content-Type: application/json" --data \
      *   '{"customerId":123, "email":"contact@email.com"}'
@@ -81,14 +80,14 @@ public class CustomerController {
         if (!body.hasValidAddress()) {
             throw new InvalidInputException("Invalid customer!");
         }
-        Customer customer = customerService.updateCustomerEmailAndAddress(body);
-        LOG.debug("updateCustomer: customer entity was updated, ID: {}", customer.getId());
+        customerService.updateCustomerEmailAndAddress(body);
+        LOG.debug("updateCustomer: customer entity was updated, ID: {}", body.getId());
     }
 
     /**
      * Sample usage: "curl $HOST:$PORT/marketing/customer/1".
      *
-     * @param customerId Id of the customer
+     * @param customerId ID of the customer
      * @return the customer with the provided ID
      */
     @Operation(
@@ -129,9 +128,22 @@ public class CustomerController {
             summary = "${api.customer-info.get-customers-find.description}",
             description = "${api.customer-info.get-customers-find.notes}")
     @GetMapping("/find")
-    public List<Customer> getCustomersByName(@RequestParam("firstName") String firstName,
+    public List<Customer> getCustomersByName(@RequestParam(value = "firstName", required = false) String firstName,
                                       @RequestParam(value = "lastName", required = false) String lastName) {
-        LOG.debug("getCustomersByName: Search customers by first name or last name: {}, {}", firstName,  lastName);
+        LOG.debug("getCustomersByName: Find customers by first name or last name: {}, {}", firstName,  lastName);
         return customerService.getAllCustomers(firstName, lastName);
+    }
+
+    @Operation(
+            summary = "${api.customer-info.get-customers-search.description}",
+            description = "${api.customer-info.get-customers-search.notes}")
+    @GetMapping("/search")
+    public List<Customer> searchCustomersByName(@RequestParam(value = "firstName", required = false) String firstName,
+                                             @RequestParam(value = "lastName", required = false) String lastName) {
+        LOG.debug("searchCustomersByName: Search customers by first name or last name: {}, {}", firstName,  lastName);
+        if (StringUtils.isAllEmpty(firstName, lastName)) {
+            return customerService.getAllCustomers();
+        }
+        return customerService.searchAllCustomers(firstName, lastName);
     }
 }

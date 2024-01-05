@@ -1,5 +1,6 @@
 package ro.veltanmarius.mkcustomer.model.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,13 +12,17 @@ import java.time.Instant;
 @MappedSuperclass
 public class AbstractEntity {
     @CreationTimestamp
+    @Column(name="created_date")
     private Instant createdOn;
     @UpdateTimestamp
+    @Column(name="last_updated_date")
     private Instant lastUpdatedOn;
     @CreatedBy
+    @Column(name="created_by")
     private String createdBy;
     @LastModifiedBy
-    private String updatedBy;
+    @Column(name="last_updated_by")
+    private String lastUpdatedBy;
     public Instant getCreatedOn() {
         return createdOn;
     }
@@ -42,11 +47,11 @@ public class AbstractEntity {
         this.createdBy = createdBy;
     }
 
-    public String getUpdatedBy() {
-        return updatedBy;
+    public String getLastUpdatedBy() {
+        return lastUpdatedBy;
     }
 
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
+    public void setLastUpdatedBy(String updatedBy) {
+        this.lastUpdatedBy = updatedBy;
     }
 }

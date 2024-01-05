@@ -2,7 +2,7 @@ package ro.veltanmarius.mkcustomer.model;
 
 import jakarta.validation.constraints.Email;
 
-public class CustomerMutableData {
+public sealed class CustomerMutableData permits Customer {
 
     protected int id;
     @Email
