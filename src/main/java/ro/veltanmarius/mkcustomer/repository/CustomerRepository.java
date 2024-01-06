@@ -6,6 +6,9 @@ import ro.veltanmarius.mkcustomer.model.entity.CustomerEntity;
 
 import java.util.List;
 
+/**
+ * @author Marius Veltan
+ */
 @Repository
 public interface CustomerRepository extends JpaRepository<CustomerEntity, Integer> {
 

@@ -18,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ro.veltanmarius.mkcustomer.model.entity.CustomerEntity;
 import ro.veltanmarius.mkcustomer.repository.CustomerRepository;
 
+/**
+ * @author Marius Veltan
+ */
 @DataJpaTest
 @Transactional(propagation = NOT_SUPPORTED)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -40,7 +43,6 @@ class MarketingCustomerPersistenceTests {
 
     @Test
     void create() {
-
         CustomerEntity newEntity = new CustomerEntity(1, "firstName", "lastName", 18, "email@email.com", "st", "no", "zp", "ci", "co");
         repository.save(newEntity);
 
@@ -62,39 +64,65 @@ class MarketingCustomerPersistenceTests {
 
     @Test
     void getByCustomerId() {
-        Optional<CustomerEntity> entity = repository.findById(savedEntity.getId());
+        Optional<CustomerEntity> entities = repository.findById(savedEntity.getId());
 
-        assertTrue(entity.isPresent());
-        assertEqualsReview(savedEntity, entity.get());
+        assertTrue(entities.isPresent());
+        assertEqualsReview(savedEntity, entities.get());
     }
 
     @Test
-    void getCustomerByFirstNameAndLastName() {
-        List<CustomerEntity> entity = repository.findCustomerByFirstNameOrLastName(savedEntity.getFirstName(), savedEntity.getLastName());
+    void getCustomerByFirstNameOrLastName() {
+        List<CustomerEntity> entities = repository.findCustomerByFirstNameOrLastName(savedEntity.getFirstName(), savedEntity.getLastName());
 
-        assertThat(entity, hasSize(1));
-        assertEqualsReview(savedEntity, entity.get(0));
+        assertThat(entities, hasSize(1));
+        assertEqualsReview(savedEntity, entities.get(0));
     }
 
     @Test
     void getCustomerOnlyByFirstName() {
-        List<CustomerEntity> entity = repository.findCustomerByFirstNameOrLastName(savedEntity.getFirstName(), "");
+        List<CustomerEntity> entities = repository.findCustomerByFirstNameOrLastName(savedEntity.getFirstName(), "");
 
-        assertThat(entity, hasSize(1));
-        assertEqualsReview(savedEntity, entity.get(0));
+        assertThat(entities, hasSize(1));
+        assertEqualsReview(savedEntity, entities.get(0));
     }
 
     @Test
     void getCustomerOnlyByLastName() {
-        List<CustomerEntity> entity = repository.findCustomerByFirstNameOrLastName("", savedEntity.getLastName());
+        List<CustomerEntity> entities = repository.findCustomerByFirstNameOrLastName("", savedEntity.getLastName());
 
-        assertThat(entity, hasSize(1));
-        assertEqualsReview(savedEntity, entity.get(0));
+        assertThat(entities, hasSize(1));
+        assertEqualsReview(savedEntity, entities.get(0));
+    }
+
+    @Test
+    void searchCustomerByFirstNameOrLastName() {
+        // IgnoreCase
+        List<CustomerEntity> entities = repository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("NAME", "NAME");
+        assertThat(entities, hasSize(1));
+        assertEqualsReview(savedEntity, entities.get(0));
+        // Start With
+        entities = repository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("first", "x");
+        assertThat(entities, hasSize(1));
+        assertEqualsReview(savedEntity, entities.get(0));
+        // End With
+        entities = repository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("x", "me");
+        assertThat(entities, hasSize(1));
+        assertEqualsReview(savedEntity, entities.get(0));
+        // Containing
+        entities = repository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("irstN", null);
+        assertThat(entities, hasSize(1));
+        assertEqualsReview(savedEntity, entities.get(0));
+        // None
+        entities = repository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("x", "y");
+        assertThat(entities, hasSize(0));
+        entities = repository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(null, "y");
+        assertThat(entities, hasSize(0));
+        entities = repository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("x", null);
+        assertThat(entities, hasSize(0));
     }
 
     @Test
     void optimisticLockError() {
-
         // Store the saved entity in two separate entity objects
         CustomerEntity entity1 = repository.findById(savedEntity.getId()).get();
         CustomerEntity entity2 = repository.findById(savedEntity.getId()).get();
@@ -110,7 +138,7 @@ class MarketingCustomerPersistenceTests {
             repository.save(entity2);
         });
 
-        // Get the updated entity from the database and verify its new sate
+        // Get the updated entity from the database and verify its new state
         CustomerEntity updatedEntity = repository.findById(savedEntity.getId()).get();
         assertEquals(1, (int)updatedEntity.getVersion());
         assertEquals("n1", updatedEntity.getFirstName());

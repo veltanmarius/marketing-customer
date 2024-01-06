@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ro.veltanmarius.mkcustomer.exceptions.InvalidInputException;
 import ro.veltanmarius.mkcustomer.exceptions.ObjectNotFoundException;
 
+/**
+ * @author Marius Veltan
+ */
 @RestControllerAdvice
-class GlobalControllerExceptionHandler {
+public class GlobalControllerExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
 

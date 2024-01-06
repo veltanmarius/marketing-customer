@@ -1,0 +1,11 @@
+version: '2.4'
+
+services:
+  marketing-customer:
+    build: .
+    image: marketing-customer
+    mem_limit: 512m
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=default

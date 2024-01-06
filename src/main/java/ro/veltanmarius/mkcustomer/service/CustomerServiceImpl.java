@@ -15,6 +15,9 @@ import ro.veltanmarius.mkcustomer.repository.CustomerRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author Marius Veltan
+ */
 @Service
 @Transactional(readOnly = true)
 public class CustomerServiceImpl implements CustomerService {
@@ -73,12 +76,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> getAllCustomers(String firstName, String lastName) {
+    public List<Customer> getCustomersByName(String firstName, String lastName) {
+        LOG.debug("getCustomersByName: {} or {}", firstName, lastName);
         return customerRepository.findCustomerByFirstNameOrLastName(firstName, lastName).stream().map(customerMapper::entityToApi).toList();
     }
 
     @Override
-    public List<Customer> searchAllCustomers(String firstName, String lastName) {
+    public List<Customer> searchCustomersByName(String firstName, String lastName) {
+        LOG.debug("searchCustomersByName: {} or {}", firstName, lastName);
         return customerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(firstName, lastName).stream().map(customerMapper::entityToApi).toList();
     }
 }

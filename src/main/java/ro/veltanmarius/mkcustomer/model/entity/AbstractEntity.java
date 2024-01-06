@@ -9,6 +9,9 @@ import org.springframework.data.annotation.LastModifiedBy;
 
 import java.time.Instant;
 
+/**
+ * @author Marius Veltan
+ */
 @MappedSuperclass
 public class AbstractEntity {
     @CreationTimestamp

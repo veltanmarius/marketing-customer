@@ -6,6 +6,9 @@ import org.mapstruct.Mappings;
 import ro.veltanmarius.mkcustomer.model.Customer;
 import ro.veltanmarius.mkcustomer.model.entity.CustomerEntity;
 
+/**
+ * @author Marius Veltan
+ */
 @Mapper(componentModel = "spring")
 public interface CustomerMapper {
 

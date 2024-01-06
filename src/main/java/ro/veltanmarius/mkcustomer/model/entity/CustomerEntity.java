@@ -3,6 +3,9 @@ package ro.veltanmarius.mkcustomer.model.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * @author Marius Veltan
+ */
 @Entity
 @Table(name = "customer",
         indexes = {

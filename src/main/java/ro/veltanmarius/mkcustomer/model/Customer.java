@@ -3,6 +3,9 @@ package ro.veltanmarius.mkcustomer.model;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
+/**
+ * @author Marius Veltan
+ */
 public final class Customer extends CustomerMutableData {
 
     @NotBlank

@@ -5,6 +5,9 @@ import ro.veltanmarius.mkcustomer.model.CustomerMutableData;
 
 import java.util.List;
 
+/**
+ * @author Marius Veltan
+ */
 public interface CustomerService {
     Customer createCustomer(Customer customer);
 
@@ -14,7 +17,7 @@ public interface CustomerService {
 
     List<Customer> getAllCustomers();
 
-    List<Customer> getAllCustomers(String firstName, String lastName);
+    List<Customer> getCustomersByName(String firstName, String lastName);
 
-    List<Customer> searchAllCustomers(String firstName, String lastName);
+    List<Customer> searchCustomersByName(String firstName, String lastName);
 }

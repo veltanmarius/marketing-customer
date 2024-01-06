@@ -18,6 +18,9 @@ import ro.veltanmarius.mkcustomer.service.CustomerService;
 
 import java.util.List;
 
+/**
+ * @author Marius Veltan
+ */
 @RestController
 @RequestMapping("/marketing/customers")
 @Tag(name = "CustomerController", description = "REST API for customer information.")
@@ -131,7 +134,7 @@ public class CustomerController {
     public List<Customer> getCustomersByName(@RequestParam(value = "firstName", required = false) String firstName,
                                       @RequestParam(value = "lastName", required = false) String lastName) {
         LOG.debug("getCustomersByName: Find customers by first name or last name: {}, {}", firstName,  lastName);
-        return customerService.getAllCustomers(firstName, lastName);
+        return customerService.getCustomersByName(firstName, lastName);
     }
 
     @Operation(
@@ -140,10 +143,10 @@ public class CustomerController {
     @GetMapping("/search")
     public List<Customer> searchCustomersByName(@RequestParam(value = "firstName", required = false) String firstName,
                                              @RequestParam(value = "lastName", required = false) String lastName) {
-        LOG.debug("searchCustomersByName: Search customers by first name or last name: {}, {}", firstName,  lastName);
+        LOG.debug("searchCustomersByName: search customers by first name or last name: {}, {}", firstName,  lastName);
         if (StringUtils.isAllEmpty(firstName, lastName)) {
             return customerService.getAllCustomers();
         }
-        return customerService.searchAllCustomers(firstName, lastName);
+        return customerService.searchCustomersByName(firstName, lastName);
     }
 }

@@ -2,6 +2,9 @@ package ro.veltanmarius.mkcustomer.model;
 
 import jakarta.validation.constraints.Email;
 
+/**
+ * @author Marius Veltan
+ */
 public sealed class CustomerMutableData permits Customer {
 
     protected int id;
