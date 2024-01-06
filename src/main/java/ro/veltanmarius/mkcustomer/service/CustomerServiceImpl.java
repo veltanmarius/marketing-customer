@@ -13,7 +13,6 @@ import ro.veltanmarius.mkcustomer.model.mapper.CustomerMapper;
 import ro.veltanmarius.mkcustomer.repository.CustomerRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Marius Veltan
@@ -64,8 +63,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer getCustomer(int customerId) {
-        Optional<CustomerEntity> customerEntity = customerRepository.findById(customerId);
-        Customer customer = customerEntity.isPresent() ? customerMapper.entityToApi(customerEntity.get()) : new Customer();
+        CustomerEntity customerEntity = customerRepository.findById(customerId)
+                .orElseThrow(() -> new ObjectNotFoundException("Customer does not exist for ID " + customerId));
+        Customer customer = customerMapper.entityToApi(customerEntity);
         LOG.debug("getCustomer: customer entity found {} {} {}", customer.getId(), customer.getFirstName(), customer.getLastName());
         return customer;
     }

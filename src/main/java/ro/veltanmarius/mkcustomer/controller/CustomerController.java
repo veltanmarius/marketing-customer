@@ -111,9 +111,6 @@ public class CustomerController {
 
         LOG.debug("getCustomer: lookup a customer for customerId: {}", customerId);
         Customer customer = customerService.getCustomer(customerId);
-        if (customer.getId() == 0) {
-            throw new ObjectNotFoundException("No customer found for customerId: " + customerId);
-        }
 
         return customer;
     }

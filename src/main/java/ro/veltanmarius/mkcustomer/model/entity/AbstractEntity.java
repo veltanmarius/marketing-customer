@@ -2,6 +2,7 @@ package ro.veltanmarius.mkcustomer.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
@@ -13,7 +14,8 @@ import java.time.Instant;
  * @author Marius Veltan
  */
 @MappedSuperclass
-public class AbstractEntity {
+@Data
+public sealed class AbstractEntity permits CustomerEntity {
     @CreationTimestamp
     @Column(name="created_date")
     private Instant createdOn;
@@ -26,35 +28,5 @@ public class AbstractEntity {
     @LastModifiedBy
     @Column(name="last_updated_by")
     private String lastUpdatedBy;
-    public Instant getCreatedOn() {
-        return createdOn;
-    }
 
-    public void setCreatedOn(Instant createdOn) {
-        this.createdOn = createdOn;
-    }
-
-    public Instant getLastUpdatedOn() {
-        return lastUpdatedOn;
-    }
-
-    public void setLastUpdatedOn(Instant lastUpdatedOn) {
-        this.lastUpdatedOn = lastUpdatedOn;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public String getLastUpdatedBy() {
-        return lastUpdatedBy;
-    }
-
-    public void setLastUpdatedBy(String updatedBy) {
-        this.lastUpdatedBy = updatedBy;
-    }
 }

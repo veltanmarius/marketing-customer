@@ -17,13 +17,13 @@ import ro.veltanmarius.mkcustomer.exceptions.ObjectNotFoundException;
  * @author Marius Veltan
  */
 @RestControllerAdvice
-public class GlobalControllerExceptionHandler {
+public final class GlobalControllerExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
 
     @ResponseStatus(NOT_FOUND)
     @ExceptionHandler(ObjectNotFoundException.class)
-    public @ResponseBody HttpErrorInfo handleNotFoundExceptions(
+    public @ResponseBody GlobalHttpErrorInfo handleNotFoundExceptions(
             ServerHttpRequest request, ObjectNotFoundException ex) {
 
         return createHttpErrorInfo(NOT_FOUND, request, ex);
@@ -31,19 +31,19 @@ public class GlobalControllerExceptionHandler {
 
     @ResponseStatus(UNPROCESSABLE_ENTITY)
     @ExceptionHandler(InvalidInputException.class)
-    public @ResponseBody HttpErrorInfo handleInvalidInputException(
+    public @ResponseBody GlobalHttpErrorInfo handleInvalidInputException(
             ServerHttpRequest request, InvalidInputException ex) {
 
         return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
     }
 
-    private HttpErrorInfo createHttpErrorInfo(
+    private GlobalHttpErrorInfo createHttpErrorInfo(
             HttpStatus httpStatus, ServerHttpRequest request, Exception ex) {
 
         final String path = request.getPath().pathWithinApplication().value();
         final String message = ex.getMessage();
 
         LOG.debug("Returning HTTP status: {} for path: {}, message: {}", httpStatus, path, message);
-        return new HttpErrorInfo(httpStatus, path, message);
+        return new GlobalHttpErrorInfo(httpStatus, path, message);
     }
 }

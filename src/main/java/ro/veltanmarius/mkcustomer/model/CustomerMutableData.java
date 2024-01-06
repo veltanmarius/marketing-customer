@@ -1,76 +1,26 @@
 package ro.veltanmarius.mkcustomer.model;
 
 import jakarta.validation.constraints.Email;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author Marius Veltan
  */
+@AllArgsConstructor
+@Getter
+@SuperBuilder
 public sealed class CustomerMutableData permits Customer {
 
-    protected int id;
+    protected final int id;
     @Email
-    protected String email;
-    protected String street;
-    protected String number;
-    protected String zipCode;
-    protected String city;
-    protected String country;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
+    protected final String email;
+    protected final String street;
+    protected final String number;
+    protected final String zipCode;
+    protected final String city;
+    protected final String country;
 
     public boolean hasValidAddress() {
         if (email != null && email.trim().length() > 0) {
