@@ -7,10 +7,9 @@ import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static reactor.core.publisher.Mono.just;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -27,9 +26,8 @@ import java.util.List;
  * @author Marius Veltan
  */
 @SpringBootTest(webEnvironment = RANDOM_PORT)
+@Slf4j
 class MarketingCustomerApplicationTests {
-
-	private static final Logger LOG = LoggerFactory.getLogger(MarketingCustomerApplicationTests.class);
 
 	private static final String CUSTOMER_URL="/marketing/customers";
 	private static final int CUSTOMER_ID_OK = 1;
@@ -58,7 +56,7 @@ class MarketingCustomerApplicationTests {
 						customer,
 						new Customer(2, "fn2", "ln2", 18, "e2@x.ro", "st", "no", "zp", "ci", "co")
 				));
-		when(customerService.searchCustomersByName("fn", "ln"))
+		when(customerService.searchCustomersPartialMatch("fn", "ln"))
 				.thenReturn(List.of(
 						customer
 				));
@@ -66,7 +64,7 @@ class MarketingCustomerApplicationTests {
 
 	@Test
 	void contextLoads() {
-		LOG.debug("contextLoads: Tests are configured correctly");
+		log.debug("contextLoads: Tests are configured correctly");
 	}
 
 	@Test
@@ -88,15 +86,15 @@ class MarketingCustomerApplicationTests {
 		customer = new Customer(2, "fn", " ", 18, "", "", "", "", "", "");
 		postAndVerifyCustomer(customer, BAD_REQUEST);
 		customer = new Customer(2, "fn", "ln", 18, "", "", "", "", "", "");
-		postAndVerifyCustomer(customer, UNPROCESSABLE_ENTITY);
+		postAndVerifyCustomer(customer, BAD_REQUEST);
 		customer = new Customer(2, "fn", "ln", 18, "", "st", "", "", "", "");
-		postAndVerifyCustomer(customer, UNPROCESSABLE_ENTITY);
+		postAndVerifyCustomer(customer, BAD_REQUEST);
 		customer = new Customer(2, "fn", "ln", 18, "", "st", "no", "", "", "");
-		postAndVerifyCustomer(customer, UNPROCESSABLE_ENTITY);
+		postAndVerifyCustomer(customer, BAD_REQUEST);
 		customer = new Customer(2, "fn", "ln", 18, "", "st", "no", "zp", "", "");
-		postAndVerifyCustomer(customer, UNPROCESSABLE_ENTITY);
+		postAndVerifyCustomer(customer, BAD_REQUEST);
 		customer = new Customer(2, "fn", "ln", 18, "", "st", "no", "zp", "ci", "");
-		postAndVerifyCustomer(customer, UNPROCESSABLE_ENTITY);
+		postAndVerifyCustomer(customer, BAD_REQUEST);
 	}
 
 	@Test

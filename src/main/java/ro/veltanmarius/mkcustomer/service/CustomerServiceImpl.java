@@ -1,13 +1,14 @@
 package ro.veltanmarius.mkcustomer.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.veltanmarius.mkcustomer.exceptions.ObjectNotFoundException;
 import ro.veltanmarius.mkcustomer.model.Customer;
-import ro.veltanmarius.mkcustomer.model.CustomerMutableData;
+import ro.veltanmarius.mkcustomer.rest.model.CustomerCreateRequestRequest;
+import ro.veltanmarius.mkcustomer.rest.model.CustomerUpdateRequestRequest;
 import ro.veltanmarius.mkcustomer.model.entity.CustomerEntity;
 import ro.veltanmarius.mkcustomer.model.mapper.CustomerMapper;
 import ro.veltanmarius.mkcustomer.repository.CustomerRepository;
@@ -19,45 +20,37 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
+@Slf4j
+@RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
     private final CustomerMapper customerMapper;
 
     private final CustomerRepository customerRepository;
 
-    @Autowired
-    public CustomerServiceImpl(CustomerMapper customerMapper, CustomerRepository customerRepository) {
-        this.customerMapper = customerMapper;
-        this.customerRepository = customerRepository;
-    }
-
-
     @Override
     @Transactional
-    public Customer createCustomer(Customer customer) {
-        CustomerEntity customerEntity = customerRepository.save(customerMapper.apiToEntity(customer));
-        LOG.debug("createCustomer: customer entity with ID {} was created for {} {}", customerEntity.getId(), customer.getFirstName(), customer.getLastName());
+    public Customer createCustomer(CustomerCreateRequestRequest createRequest) {
+        CustomerEntity customerEntity = customerRepository.save(customerMapper.apiToEntity(createRequest));
+        log.debug("createCustomer: customer entity with ID {} was created for {} {}", customerEntity.getId(), createRequest.getFirstName(), createRequest.getLastName());
         return customerMapper.entityToApi(customerEntity);
     }
 
-
     @Override
     @Transactional
-    public Customer updateCustomerEmailAndAddress(CustomerMutableData customerMutableData) {
-        CustomerEntity customerEntity = customerRepository.findById(customerMutableData.getId())
-                .orElseThrow(() -> new ObjectNotFoundException("Customer does not exist for ID " + customerMutableData.getId()));
+    public Customer updateCustomerEmailAndAddress(CustomerUpdateRequestRequest customerRequest) {
+        CustomerEntity customerEntity = customerRepository.findById(customerRequest.getId())
+                .orElseThrow(() -> new ObjectNotFoundException("Customer does not exist for ID " + customerRequest.getId()));
 
-        customerEntity.setEmail(customerMutableData.getEmail());
-        customerEntity.setStreet(customerMutableData.getStreet());
-        customerEntity.setNumber(customerMutableData.getNumber());
-        customerEntity.setZipCode(customerMutableData.getZipCode());
-        customerEntity.setCity(customerMutableData.getCity());
-        customerEntity.setCountry(customerMutableData.getCountry());
+        customerEntity.setEmail(customerRequest.getEmail());
+        customerEntity.setStreet(customerRequest.getStreet());
+        customerEntity.setNumber(customerRequest.getNumber());
+        customerEntity.setZipCode(customerRequest.getZipCode());
+        customerEntity.setCity(customerRequest.getCity());
+        customerEntity.setCountry(customerRequest.getCountry());
 
         CustomerEntity newEntity = customerRepository.save(customerEntity);
-        LOG.debug("updateCustomer: customer entity with ID {} was updated for {} {}", customerEntity.getId(), newEntity.getFirstName(), newEntity.getLastName());
+        log.debug("updateCustomer: customer entity with ID {} was updated for {} {}", customerEntity.getId(), newEntity.getFirstName(), newEntity.getLastName());
         return customerMapper.entityToApi(newEntity);
     }
 
@@ -66,7 +59,7 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerEntity customerEntity = customerRepository.findById(customerId)
                 .orElseThrow(() -> new ObjectNotFoundException("Customer does not exist for ID " + customerId));
         Customer customer = customerMapper.entityToApi(customerEntity);
-        LOG.debug("getCustomer: customer entity found {} {} {}", customer.getId(), customer.getFirstName(), customer.getLastName());
+        log.debug("getCustomer: customer entity found {} {} {}", customer.getId(), customer.getFirstName(), customer.getLastName());
         return customer;
     }
 
@@ -76,14 +69,18 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> getCustomersByName(String firstName, String lastName) {
-        LOG.debug("getCustomersByName: {} or {}", firstName, lastName);
+    public List<Customer> findCustomersExactMatch(String firstName, String lastName) {
+        log.debug("getCustomersByName: {} or {}", firstName, lastName);
         return customerRepository.findCustomerByFirstNameOrLastName(firstName, lastName).stream().map(customerMapper::entityToApi).toList();
     }
 
     @Override
-    public List<Customer> searchCustomersByName(String firstName, String lastName) {
-        LOG.debug("searchCustomersByName: {} or {}", firstName, lastName);
+    public List<Customer> searchCustomersPartialMatch(String firstName, String lastName) {
+        log.debug("searchCustomersByName: {} or {}", firstName, lastName);
+        if (StringUtils.isAllEmpty(firstName, lastName)) {
+            log.debug("searchCustomersByName: No values for parameters firstName and lastName, all customers will be returned");
+            return getAllCustomers();
+        }
         return customerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(firstName, lastName).stream().map(customerMapper::entityToApi).toList();
     }
 }

@@ -1,21 +1,16 @@
-package ro.veltanmarius.mkcustomer.model;
+package ro.veltanmarius.mkcustomer.rest.model;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Value;
 
 /**
  * @author Marius Veltan
  */
 @Value
-@Builder
-@AllArgsConstructor
-public class Customer {
-
-    private int id;
+@ValidCustomerRequest
+public class CustomerCreateRequestRequest implements CustomerDataRequest {
     @NotBlank
     private String firstName;
     @NotBlank
@@ -29,4 +24,5 @@ public class Customer {
     private String zipCode;
     private String city;
     private String country;
+
 }

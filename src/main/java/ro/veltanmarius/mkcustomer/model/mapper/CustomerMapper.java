@@ -3,6 +3,7 @@ package ro.veltanmarius.mkcustomer.model.mapper;
 import org.springframework.stereotype.Component;
 import ro.veltanmarius.mkcustomer.model.Customer;
 import ro.veltanmarius.mkcustomer.model.entity.CustomerEntity;
+import ro.veltanmarius.mkcustomer.rest.model.CustomerCreateRequestRequest;
 
 /**
  * @author Marius Veltan
@@ -28,6 +29,20 @@ public final class CustomerMapper {
     public CustomerEntity apiToEntity(Customer api) {
         CustomerEntity customerEntity = new CustomerEntity();
         customerEntity.setId(api.getId());
+        customerEntity.setFirstName(api.getFirstName());
+        customerEntity.setLastName(api.getLastName());
+        customerEntity.setAge(api.getAge());
+        customerEntity.setEmail(api.getEmail());
+        customerEntity.setStreet(api.getStreet());
+        customerEntity.setNumber(api.getNumber());
+        customerEntity.setZipCode(api.getZipCode());
+        customerEntity.setCity(api.getCity());
+        customerEntity.setCountry(api.getCountry());
+        return customerEntity;
+    }
+
+    public CustomerEntity apiToEntity(CustomerCreateRequestRequest api) {
+        CustomerEntity customerEntity = new CustomerEntity();
         customerEntity.setFirstName(api.getFirstName());
         customerEntity.setLastName(api.getLastName());
         customerEntity.setAge(api.getAge());
