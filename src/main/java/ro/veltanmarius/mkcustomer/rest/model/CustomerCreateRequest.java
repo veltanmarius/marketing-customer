@@ -10,7 +10,7 @@ import lombok.Value;
  */
 @Value
 @ValidCustomerRequest
-public class CustomerCreateRequestRequest implements CustomerDataRequest {
+public class CustomerCreateRequest implements CustomerDataRequest {
     @NotBlank
     private String firstName;
     @NotBlank

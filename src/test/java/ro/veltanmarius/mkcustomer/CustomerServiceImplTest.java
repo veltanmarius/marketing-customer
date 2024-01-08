@@ -9,7 +9,7 @@ import ro.veltanmarius.mkcustomer.model.Customer;
 import ro.veltanmarius.mkcustomer.model.entity.CustomerEntity;
 import ro.veltanmarius.mkcustomer.model.mapper.CustomerMapper;
 import ro.veltanmarius.mkcustomer.repository.CustomerRepository;
-import ro.veltanmarius.mkcustomer.rest.model.CustomerCreateRequestRequest;
+import ro.veltanmarius.mkcustomer.rest.model.CustomerCreateRequest;
 import ro.veltanmarius.mkcustomer.service.CustomerServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -37,8 +37,8 @@ class CustomerServiceImplTest {
         return new CustomerEntity(null, "firstName", "lastName", 18, "email@email.com", "st", "no", "zp", "ci", "co");
     }
 
-    private CustomerCreateRequestRequest getCustomerCreateRequest() {
-        return new CustomerCreateRequestRequest("firstName", "lastName", 18, "email@email.com", "st", "no", "zp", "ci", "co");
+    private CustomerCreateRequest getCustomerCreateRequest() {
+        return new CustomerCreateRequest("firstName", "lastName", 18, "email@email.com", "st", "no", "zp", "ci", "co");
     }
 
     private Customer getExpectedCustomer() {
@@ -48,7 +48,7 @@ class CustomerServiceImplTest {
     @Test
     void createCustomerSuccess() {
         CustomerEntity initialCustomerEntity = getInitialCustomerEntity();
-        CustomerCreateRequestRequest customerCreateRequest = getCustomerCreateRequest();
+        CustomerCreateRequest customerCreateRequest = getCustomerCreateRequest();
 
         when(customerRepository.save(initialCustomerEntity)).thenReturn(getExpectedCustomerEntity());
         when(customerMapper.apiToEntity(customerCreateRequest)).thenReturn(initialCustomerEntity);

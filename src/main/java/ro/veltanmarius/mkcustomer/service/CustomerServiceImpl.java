@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.veltanmarius.mkcustomer.exceptions.ObjectNotFoundException;
 import ro.veltanmarius.mkcustomer.model.Customer;
-import ro.veltanmarius.mkcustomer.rest.model.CustomerCreateRequestRequest;
-import ro.veltanmarius.mkcustomer.rest.model.CustomerUpdateRequestRequest;
+import ro.veltanmarius.mkcustomer.rest.model.CustomerCreateRequest;
+import ro.veltanmarius.mkcustomer.rest.model.CustomerUpdateRequest;
 import ro.veltanmarius.mkcustomer.model.entity.CustomerEntity;
 import ro.veltanmarius.mkcustomer.model.mapper.CustomerMapper;
 import ro.veltanmarius.mkcustomer.repository.CustomerRepository;
@@ -30,7 +30,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public Customer createCustomer(CustomerCreateRequestRequest createRequest) {
+    public Customer createCustomer(CustomerCreateRequest createRequest) {
         CustomerEntity customerEntity = customerRepository.save(customerMapper.apiToEntity(createRequest));
         log.debug("createCustomer: customer entity with ID {} was created for {} {}", customerEntity.getId(), createRequest.getFirstName(), createRequest.getLastName());
         return customerMapper.entityToApi(customerEntity);
@@ -38,7 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public Customer updateCustomerEmailAndAddress(CustomerUpdateRequestRequest customerRequest) {
+    public Customer updateCustomerEmailAndAddress(CustomerUpdateRequest customerRequest) {
         CustomerEntity customerEntity = customerRepository.findById(customerRequest.getId())
                 .orElseThrow(() -> new ObjectNotFoundException("Customer does not exist for ID " + customerRequest.getId()));
 

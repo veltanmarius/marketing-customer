@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import ro.veltanmarius.mkcustomer.model.Customer;
 import ro.veltanmarius.mkcustomer.model.entity.CustomerEntity;
 import ro.veltanmarius.mkcustomer.model.mapper.CustomerMapper;
+import ro.veltanmarius.mkcustomer.rest.model.CustomerCreateRequest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -12,7 +13,7 @@ public class CustomerMapperTest {
 
     CustomerMapper customerMapper = new CustomerMapper();
     @Test
-    void mapperTests() {
+    void mapperCustomerTests() {
         Customer customer = new Customer(1, "fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
         CustomerEntity customerEntity = new CustomerEntity(1, "fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
         Assertions.assertThat(customerMapper.apiToEntity(customer)).isEqualTo(customerEntity);
@@ -28,5 +29,14 @@ public class CustomerMapperTest {
         assertEquals(c.getZipCode(), customer.getZipCode());
         assertEquals(c.getCity(), customer.getCity());
         assertEquals(c.getCountry(), customer.getCountry());
+    }
+
+    @Test
+    void mapperCustomerCreateRequestTests() {
+        CustomerCreateRequest customer = new CustomerCreateRequest("fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
+        CustomerEntity initialCustomerEntity = customerMapper.apiToEntity(customer);
+        initialCustomerEntity.setId(1);
+        CustomerEntity expectedCustomerEntity = new CustomerEntity(1, "fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
+        Assertions.assertThat(initialCustomerEntity).isEqualTo(expectedCustomerEntity);
     }
 }

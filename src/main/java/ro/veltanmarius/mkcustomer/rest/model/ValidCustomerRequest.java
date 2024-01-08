@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidCustomerRequest {
-    String message() default "Invalid customer request";
+    String message() default "Invalid customer request. Set email or all address fields.";
 
     Class<?>[] groups() default {};
 

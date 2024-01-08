@@ -8,7 +8,7 @@ import lombok.Value;
  */
 @Value
 @ValidCustomerRequest
-public class CustomerUpdateRequestRequest implements CustomerDataRequest {
+public class CustomerUpdateRequest implements CustomerDataRequest {
 
     private int id;
     @Email

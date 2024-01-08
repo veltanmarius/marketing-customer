@@ -12,8 +12,8 @@ import org.springframework.http.ResponseEntity;
 import ro.veltanmarius.mkcustomer.exceptions.InvalidInputException;
 import ro.veltanmarius.mkcustomer.model.Customer;
 import org.springframework.web.bind.annotation.*;
-import ro.veltanmarius.mkcustomer.rest.model.CustomerCreateRequestRequest;
-import ro.veltanmarius.mkcustomer.rest.model.CustomerUpdateRequestRequest;
+import ro.veltanmarius.mkcustomer.rest.model.CustomerCreateRequest;
+import ro.veltanmarius.mkcustomer.rest.model.CustomerUpdateRequest;
 import ro.veltanmarius.mkcustomer.service.CustomerService;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class CustomerController {
      * Sample usage, see below.
      * curl -X POST $HOST:$PORT/marketing/customers \
      * -H "Content-Type: application/json" --data \
-     * '{"customerId":123,"firstName":"my firstName","lastName": "my lastName", "email":"contact@email.com"}'
+     * '{"firstName":"my firstName","lastName": "my lastName", "age":18, "email":"contact@email.com"}'
      *
      * @param customerCreateRequest A JSON representation of the new customer
      */
@@ -46,7 +46,7 @@ public class CustomerController {
             @ApiResponse(responseCode = "422", description = "${api.responseCodes.unprocessableEntity.description}")
     })
     @PostMapping()
-    public ResponseEntity<HttpStatus> createCustomer(@Valid @RequestBody CustomerCreateRequestRequest customerCreateRequest) {
+    public ResponseEntity<HttpStatus> createCustomer(@Valid @RequestBody CustomerCreateRequest customerCreateRequest) {
         log.debug("createCustomer: creates a new customer entity for {} {}", customerCreateRequest.getFirstName(), customerCreateRequest.getLastName());
         customerService.createCustomer(customerCreateRequest);
         log.debug("createCustomer: customer entity was created, {}", customerCreateRequest);
@@ -57,7 +57,7 @@ public class CustomerController {
      * Sample usage, see below.
      * curl -X PUT $HOST:$PORT/marketing/customers \
      * -H "Content-Type: application/json" --data \
-     * '{"customerId":123, "email":"contact@email.com"}'
+     * '{"id":123, "email":"contact@email.com"}'
      *
      * @param customerUpdateRequest A JSON representation of the updated customer
      */
@@ -69,7 +69,7 @@ public class CustomerController {
             @ApiResponse(responseCode = "422", description = "${api.responseCodes.unprocessableEntity.description}")
     })
     @PutMapping()
-    public ResponseEntity<HttpStatus> updateCustomer(@Valid @RequestBody CustomerUpdateRequestRequest customerUpdateRequest) {
+    public ResponseEntity<HttpStatus> updateCustomer(@Valid @RequestBody CustomerUpdateRequest customerUpdateRequest) {
         log.debug("updateCustomer: update the customer entity with ID {}", customerUpdateRequest.getId());
         customerService.updateCustomerEmailAndAddress(customerUpdateRequest);
         log.debug("updateCustomer: customer entity was updated, ID: {}", customerUpdateRequest.getId());
@@ -77,7 +77,7 @@ public class CustomerController {
     }
 
     /**
-     * Sample usage: "curl $HOST:$PORT/marketing/customer/1".
+     * Sample usage: "curl $HOST:$PORT/marketing/customers/1".
      *
      * @param customerId ID of the customer
      * @return the customer with the provided ID

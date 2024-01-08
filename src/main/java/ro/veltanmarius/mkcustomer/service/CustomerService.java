@@ -1,8 +1,8 @@
 package ro.veltanmarius.mkcustomer.service;
 
 import ro.veltanmarius.mkcustomer.model.Customer;
-import ro.veltanmarius.mkcustomer.rest.model.CustomerCreateRequestRequest;
-import ro.veltanmarius.mkcustomer.rest.model.CustomerUpdateRequestRequest;
+import ro.veltanmarius.mkcustomer.rest.model.CustomerCreateRequest;
+import ro.veltanmarius.mkcustomer.rest.model.CustomerUpdateRequest;
 
 import java.util.List;
 
@@ -15,14 +15,14 @@ public interface CustomerService {
      * @param customer request
      * @return the created customer
      */
-    Customer createCustomer(CustomerCreateRequestRequest customer);
+    Customer createCustomer(CustomerCreateRequest customer);
 
     /**
      * Update customer
      * @param customer request
      * @return  the updated customer
      */
-    Customer updateCustomerEmailAndAddress(CustomerUpdateRequestRequest customer);
+    Customer updateCustomerEmailAndAddress(CustomerUpdateRequest customer);
 
     /**
      * Get customer by ID
