@@ -9,7 +9,7 @@ EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app.jar"]
 
 # Build and run service from terminal
-# Step 1
+# Step 1 - build the image
 # docker build -t marketing-customer .
-# Step 2
+# Step 2 - start the container
 # docker run --name marketing-customer --rm -p8080:8080 -e "SPRING_PROFILES_ACTIVE=default" marketing-customer
