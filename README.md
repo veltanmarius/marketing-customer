@@ -2,6 +2,7 @@
 Customer data (backend part) service that contains minimal operations
 
 ### Customer Data Model
+- id
 - first name
 - last name
 - age
