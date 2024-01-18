@@ -38,7 +38,7 @@ public interface CustomerService {
     List<Customer> getAllCustomers();
 
     /**
-     * Get the customers with exact first name or extact last name
+     * Get the customers with exact first name or exact last name
      * @param firstName the first name
      * @param lastName the last name
      * @return the matching customers from the database

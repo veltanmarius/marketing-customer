@@ -24,19 +24,20 @@ api:
     version: 1.0.0
     title: Customer Sample API
     description: Description of the Customer API
-    termsOfService: No Terms of Service
+    termsOfService: no-terms-of-service-url
     license: No Licence
-    licenseUrl: No-License-URL
+    licenseUrl: no-license-url
 
     externalDocDesc: No Wiki page
-    externalDocUrl: No Wiki URL
+    externalDocUrl: no-wiki-url
     contact:
       name: Marius
-      url: marius.ro
-      email: marius@mail.com
+      url: veltanmarius.ro
+      email: marius@email.ro
 
   responseCodes:
     ok.description: OK
+    created.description: Created
     badRequest.description: Bad Request, invalid format of the request. See response message for more information
     notFound.description: Not found, the specified id does not exist
     unprocessableEntity.description: Unprocessable entity, input parameters caused the processing to fail. See response message for more information

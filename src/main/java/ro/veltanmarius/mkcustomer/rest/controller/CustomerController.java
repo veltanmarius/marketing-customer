@@ -22,7 +22,7 @@ import java.util.List;
  * @author Marius Veltan
  */
 @RestController
-@RequestMapping("/marketing/customers")
+@RequestMapping("/api/v1")
 @Tag(name = "CustomerController", description = "REST API for customer information.")
 @Slf4j
 @RequiredArgsConstructor
@@ -42,15 +42,16 @@ public class CustomerController {
             summary = "${api.customer-info.create-customer.description}",
             description = "${api.customer-info.create-customer.notes}")
     @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "${api.responseCodes.created.description}"),
             @ApiResponse(responseCode = "400", description = "${api.responseCodes.badRequest.description}"),
             @ApiResponse(responseCode = "422", description = "${api.responseCodes.unprocessableEntity.description}")
     })
-    @PostMapping()
-    public ResponseEntity<HttpStatus> createCustomer(@Valid @RequestBody CustomerCreateRequest customerCreateRequest) {
+    @PostMapping("/customer")
+    public ResponseEntity<Customer> createCustomer(@Valid @RequestBody CustomerCreateRequest customerCreateRequest) {
         log.debug("createCustomer: creates a new customer entity for {} {}", customerCreateRequest.getFirstName(), customerCreateRequest.getLastName());
-        customerService.createCustomer(customerCreateRequest);
+        Customer customer = customerService.createCustomer(customerCreateRequest);
         log.debug("createCustomer: customer entity was created, {}", customerCreateRequest);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(customer, HttpStatus.CREATED);
     }
 
     /**
@@ -68,12 +69,12 @@ public class CustomerController {
             @ApiResponse(responseCode = "400", description = "${api.responseCodes.badRequest.description}"),
             @ApiResponse(responseCode = "422", description = "${api.responseCodes.unprocessableEntity.description}")
     })
-    @PutMapping()
-    public ResponseEntity<HttpStatus> updateCustomer(@Valid @RequestBody CustomerUpdateRequest customerUpdateRequest) {
+    @PutMapping("/customer")
+    public ResponseEntity<Customer> updateCustomer(@Valid @RequestBody CustomerUpdateRequest customerUpdateRequest) {
         log.debug("updateCustomer: update the customer entity with ID {}", customerUpdateRequest.getId());
-        customerService.updateCustomerEmailAndAddress(customerUpdateRequest);
+        Customer customer = customerService.updateCustomerEmailAndAddress(customerUpdateRequest);
         log.debug("updateCustomer: customer entity was updated, ID: {}", customerUpdateRequest.getId());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
     /**
@@ -91,7 +92,7 @@ public class CustomerController {
             @ApiResponse(responseCode = "404", description = "${api.responseCodes.notFound.description}"),
             @ApiResponse(responseCode = "422", description = "${api.responseCodes.unprocessableEntity.description}")
     })
-    @GetMapping("/{customerId}")
+    @GetMapping("/customer/{customerId}")
     public ResponseEntity<Customer> getCustomer(@PathVariable Integer customerId) {
         log.debug("Will call getCustomerEntity for customer with ID: {}", customerId);
         if (customerId < 1) {
@@ -102,19 +103,29 @@ public class CustomerController {
         return new ResponseEntity<>(customerService.getCustomer(customerId), HttpStatus.OK);
     }
 
+    /**
+     * Retrieve customers as JSON representation
+     * @return the customers
+     */
     @Operation(
             summary = "${api.customer-info.get-customers-all.description}",
             description = "${api.customer-info.get-customers-all.notes}")
-    @GetMapping()
+    @GetMapping("/customers")
     public ResponseEntity<List<Customer>> getCustomers() {
         log.debug("getCustomers: Retrieve all customers");
         return new ResponseEntity<>(customerService.getAllCustomers(), HttpStatus.OK);
     }
 
+    /**
+     * Retrieve customers as JSON representation
+     * @param firstName the first name
+     * @param lastName the last name
+     * @return the customers
+     */
     @Operation(
             summary = "${api.customer-info.get-customers-find.description}",
             description = "${api.customer-info.get-customers-find.notes}")
-    @GetMapping("/findExact")
+    @GetMapping("/customers/findExact")
     public ResponseEntity<List<Customer>> findCustomersExactMatch(
             @RequestParam(value = "firstName", required = false) String firstName,
             @RequestParam(value = "lastName", required = false) String lastName) {
@@ -122,10 +133,16 @@ public class CustomerController {
         return new ResponseEntity<>(customerService.findCustomersExactMatch(firstName, lastName), HttpStatus.OK);
     }
 
+    /**
+     * Retrieve customers as JSON representation
+     * @param firstName the first name
+     * @param lastName the last name
+     * @return the customers
+     */
     @Operation(
             summary = "${api.customer-info.get-customers-search.description}",
             description = "${api.customer-info.get-customers-search.notes}")
-    @GetMapping("/search")
+    @GetMapping("/customers/search")
     public ResponseEntity<List<Customer>> searchCustomersPartialMatch(
             @RequestParam(value = "firstName", required = false) String firstName,
             @RequestParam(value = "lastName", required = false) String lastName) {

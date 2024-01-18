@@ -29,7 +29,8 @@ import java.util.List;
 @Slf4j
 class MarketingCustomerApplicationTests {
 
-	private static final String CUSTOMER_URL="/marketing/customers";
+	private static final String CUSTOMER_URL="/api/v1/customer";
+	private static final String CUSTOMERS_URL="/api/v1/customers";
 	private static final int CUSTOMER_ID_OK = 1;
 	private static final int CUSTOMER_ID_NOT_FOUND = 20;
 	private static final int CUSTOMER_ID_INVALID = -1;
@@ -71,11 +72,11 @@ class MarketingCustomerApplicationTests {
 	void createCustomerOK() {
 		Customer customer;
 		customer = new Customer(1, "fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
-		postAndVerifyCustomer(customer, OK);
+		postAndVerifyCustomer(customer, CREATED);
 		customer = new Customer(1, "fn ", "ln ", 18, "", "st", "no", "zp", "ci", "co");
-		postAndVerifyCustomer(customer, OK);
+		postAndVerifyCustomer(customer, CREATED);
 		customer = new Customer(1, " FN", " LN", 18, "e@x.ro", " ", "", "", "", "");
-		postAndVerifyCustomer(customer, OK);
+		postAndVerifyCustomer(customer, CREATED);
 	}
 
 	@Test
@@ -101,7 +102,7 @@ class MarketingCustomerApplicationTests {
 	void createCustomerConstraintsFailed() {
 		Customer customer;
 		customer = new Customer(3, "fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
-		postAndVerifyCustomer(customer, OK);
+		postAndVerifyCustomer(customer, CREATED);
 		customer = new Customer(3, "fn", "ln", 18, "wrong", "st", "no", "zp", "ci", "co");
 		postAndVerifyCustomer(customer, BAD_REQUEST);
 		customer = new Customer(3, "fn", "ln", 17, "e@x.ro", "st", "no", "zp", "ci", "co");
@@ -200,7 +201,7 @@ class MarketingCustomerApplicationTests {
 
 	private WebTestClient.BodyContentSpec getAndVerifyCustomers(String path, HttpStatus expectedStatus) {
 		return client.get()
-				.uri(CUSTOMER_URL + path)
+				.uri(CUSTOMERS_URL + path)
 				.accept(APPLICATION_JSON)
 				.exchange()
 				.expectStatus().isEqualTo(expectedStatus)
