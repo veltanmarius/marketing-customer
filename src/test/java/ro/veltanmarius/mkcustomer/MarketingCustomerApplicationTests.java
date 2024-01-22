@@ -20,6 +20,7 @@ import ro.veltanmarius.mkcustomer.exceptions.ObjectNotFoundException;
 import ro.veltanmarius.mkcustomer.model.Customer;
 import ro.veltanmarius.mkcustomer.service.CustomerService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -40,10 +41,10 @@ class MarketingCustomerApplicationTests {
 	@MockBean private CustomerService customerService;
 
 	private Customer customer;
-
+	private final LocalDate dateOfBirth = LocalDate.of(1999, 9, 9);
 	@BeforeEach
 	void setUp() {
-		customer = new Customer(CUSTOMER_ID_OK, "fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
+		customer = new Customer(CUSTOMER_ID_OK, "fn", "ln", dateOfBirth, "e@x.ro", "st", "no", "zp", "ci", "co");
 		when(customerService.getCustomer(CUSTOMER_ID_OK))
 				.thenReturn(customer);
 
@@ -55,7 +56,7 @@ class MarketingCustomerApplicationTests {
 		when(customerService.getAllCustomers())
 				.thenReturn(List.of(
 						customer,
-						new Customer(2, "fn2", "ln2", 18, "e2@x.ro", "st", "no", "zp", "ci", "co")
+						new Customer(2, "fn2", "ln2", dateOfBirth, "e2@x.ro", "st", "no", "zp", "ci", "co")
 				));
 		when(customerService.searchCustomersPartialMatch("fn", "ln"))
 				.thenReturn(List.of(
@@ -71,63 +72,63 @@ class MarketingCustomerApplicationTests {
 	@Test
 	void createCustomerOK() {
 		Customer customer;
-		customer = new Customer(1, "fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
+		customer = new Customer(1, "fn", "ln", dateOfBirth, "e@x.ro", "st", "no", "zp", "ci", "co");
 		postAndVerifyCustomer(customer, CREATED);
-		customer = new Customer(1, "fn ", "ln ", 18, "", "st", "no", "zp", "ci", "co");
+		customer = new Customer(1, "fn ", "ln ", dateOfBirth, "", "st", "no", "zp", "ci", "co");
 		postAndVerifyCustomer(customer, CREATED);
-		customer = new Customer(1, " FN", " LN", 18, "e@x.ro", " ", "", "", "", "");
+		customer = new Customer(1, " FN", " LN", dateOfBirth, "e@x.ro", " ", "", "", "", "");
 		postAndVerifyCustomer(customer, CREATED);
 	}
 
 	@Test
 	void createCustomerMandatoryFieldsMissing() {
 		Customer customer;
-		customer = new Customer(2, " ", " ", 18, "", "", "", "", "", "");
+		customer = new Customer(2, " ", " ", dateOfBirth, "", "", "", "", "", "");
 		postAndVerifyCustomer(customer, BAD_REQUEST);
-		customer = new Customer(2, "fn", " ", 18, "", "", "", "", "", "");
+		customer = new Customer(2, "fn", " ", dateOfBirth, "", "", "", "", "", "");
 		postAndVerifyCustomer(customer, BAD_REQUEST);
-		customer = new Customer(2, "fn", "ln", 18, "", "", "", "", "", "");
+		customer = new Customer(2, "fn", "ln", dateOfBirth, "", "", "", "", "", "");
 		postAndVerifyCustomer(customer, BAD_REQUEST);
-		customer = new Customer(2, "fn", "ln", 18, "", "st", "", "", "", "");
+		customer = new Customer(2, "fn", "ln", dateOfBirth, "", "st", "", "", "", "");
 		postAndVerifyCustomer(customer, BAD_REQUEST);
-		customer = new Customer(2, "fn", "ln", 18, "", "st", "no", "", "", "");
+		customer = new Customer(2, "fn", "ln", dateOfBirth, "", "st", "no", "", "", "");
 		postAndVerifyCustomer(customer, BAD_REQUEST);
-		customer = new Customer(2, "fn", "ln", 18, "", "st", "no", "zp", "", "");
+		customer = new Customer(2, "fn", "ln", dateOfBirth, "", "st", "no", "zp", "", "");
 		postAndVerifyCustomer(customer, BAD_REQUEST);
-		customer = new Customer(2, "fn", "ln", 18, "", "st", "no", "zp", "ci", "");
+		customer = new Customer(2, "fn", "ln", dateOfBirth, "", "st", "no", "zp", "ci", "");
 		postAndVerifyCustomer(customer, BAD_REQUEST);
 	}
 
 	@Test
 	void createCustomerConstraintsFailed() {
 		Customer customer;
-		customer = new Customer(3, "fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
+		customer = new Customer(3, "fn", "ln", dateOfBirth, "e@x.ro", "st", "no", "zp", "ci", "co");
 		postAndVerifyCustomer(customer, CREATED);
-		customer = new Customer(3, "fn", "ln", 18, "wrong", "st", "no", "zp", "ci", "co");
+		customer = new Customer(3, "fn", "ln", dateOfBirth, "wrong", "st", "no", "zp", "ci", "co");
 		postAndVerifyCustomer(customer, BAD_REQUEST);
-		customer = new Customer(3, "fn", "ln", 17, "e@x.ro", "st", "no", "zp", "ci", "co");
+		customer = new Customer(3, "fn", "ln", LocalDate.now(), "e@x.ro", "st", "no", "zp", "ci", "co");
 		postAndVerifyCustomer(customer, BAD_REQUEST);
-		customer = new Customer(3, "fn", "ln", -1, "e@x.ro", "st", "no", "zp", "ci", "co");
+		customer = new Customer(3, "fn", "ln", LocalDate.now().plusDays(3), "e@x.ro", "st", "no", "zp", "ci", "co");
 		postAndVerifyCustomer(customer, BAD_REQUEST);
 	}
 
 	@Test
 	void updateCustomerOK() {
 		Customer customer;
-		customer = new Customer(1, null, null, 18, "e@x.ro", "st", "no", "zp", "ci", "co");
+		customer = new Customer(1, null, null, dateOfBirth, "e@x.ro", "st", "no", "zp", "ci", "co");
 		putAndVerifyCustomer(customer, OK);
-		customer = new Customer(1, null, null, 18, "", "st", "no", "zp", "ci", "co");
+		customer = new Customer(1, null, null, dateOfBirth, "", "st", "no", "zp", "ci", "co");
 		putAndVerifyCustomer(customer, OK);
-		customer = new Customer(1, null, null, 18, "e@x.ro", " ", "", "", "", "");
+		customer = new Customer(1, null, null, dateOfBirth, "e@x.ro", " ", "", "", "", "");
 		putAndVerifyCustomer(customer, OK);
 	}
 
 	@Test
 	void updateCustomerConstraintsFailed() {
 		Customer customer;
-		customer = new Customer(3, null, null, 18, "e@x.ro", "st", "no", "zp", "ci", "co");
+		customer = new Customer(3, null, null, dateOfBirth, "e@x.ro", "st", "no", "zp", "ci", "co");
 		putAndVerifyCustomer(customer, OK);
-		customer = new Customer(3, null, null, 18, "wrong", "st", "no", "zp", "ci", "co");
+		customer = new Customer(3, null, null, dateOfBirth, "wrong", "st", "no", "zp", "ci", "co");
 		putAndVerifyCustomer(customer, BAD_REQUEST);
 	}
 	@Test
@@ -136,13 +137,14 @@ class MarketingCustomerApplicationTests {
 				.jsonPath("$.id").isEqualTo(customer.getId())
 				.jsonPath("$.firstName").isEqualTo(customer.getFirstName())
 				.jsonPath("$.lastName").isEqualTo(customer.getLastName())
-				.jsonPath("$.age").isEqualTo(customer.getAge())
+				.jsonPath("$.birthday").isEqualTo(customer.getBirthday().toString())
 				.jsonPath("$.email").isEqualTo(customer.getEmail())
 				.jsonPath("$.street").isEqualTo(customer.getStreet())
 				.jsonPath("$.number").isEqualTo(customer.getNumber())
 				.jsonPath("$.zipCode").isEqualTo(customer.getZipCode())
 				.jsonPath("$.city").isEqualTo(customer.getCity())
-				.jsonPath("$.country").isEqualTo(customer.getCountry());
+				.jsonPath("$.country").isEqualTo(customer.getCountry())
+				.jsonPath("$.age").hasJsonPath();
 	}
 
 	@Test
@@ -165,13 +167,14 @@ class MarketingCustomerApplicationTests {
 				.jsonPath("$[0].id").isEqualTo(customer.getId())
 				.jsonPath("$[0].firstName").isEqualTo(customer.getFirstName())
 				.jsonPath("$[0].lastName").isEqualTo(customer.getLastName())
-				.jsonPath("$[0].age").isEqualTo(customer.getAge())
+				.jsonPath("$[0].birthday").isEqualTo(customer.getBirthday().toString())
 				.jsonPath("$[0].email").isEqualTo(customer.getEmail())
 				.jsonPath("$[0].street").isEqualTo(customer.getStreet())
 				.jsonPath("$[0].number").isEqualTo(customer.getNumber())
 				.jsonPath("$[0].zipCode").isEqualTo(customer.getZipCode())
 				.jsonPath("$[0].city").isEqualTo(customer.getCity())
 				.jsonPath("$[0].country").isEqualTo(customer.getCountry())
+				.jsonPath("$[0].age").hasJsonPath()
 				.jsonPath("$", hasSize(2));
 	}
 

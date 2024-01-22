@@ -9,11 +9,11 @@ import java.lang.annotation.*;
  * @author Marius Veltan
  */
 @Documented
-@Constraint(validatedBy = CustomerValidator.class)
-@Target(ElementType.TYPE)
+@Constraint(validatedBy = BirthdateValidator.class)
+@Target({ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ValidCustomerRequest {
-    String message() default "Invalid customer request. Set email or all address fields.";
+public @interface ValidBirthdate {
+    String message() default "Invalid customer request. The birth date must be greater or equal than 18.";
 
     Class<?>[] groups() default {};
 

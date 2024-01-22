@@ -1,9 +1,9 @@
 package ro.veltanmarius.mkcustomer.rest.model;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.Value;
+
+import java.time.LocalDate;
 
 /**
  * @author Marius Veltan
@@ -12,11 +12,15 @@ import lombok.Value;
 @ValidCustomerRequest
 public class CustomerCreateRequest implements CustomerDataRequest {
     @NotBlank
+    @Size(min = 2, max = 50)
     private String firstName;
     @NotBlank
+    @Size(min = 2, max = 50)
     private String lastName;
-    @Min(value=18)
-    private int age;
+    @NotNull
+    @Past
+    @ValidBirthdate
+    private LocalDate birthday;
     @Email
     private String email;
     private String street;

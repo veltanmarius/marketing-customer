@@ -1,11 +1,11 @@
 package ro.veltanmarius.mkcustomer.model;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
+
+import java.time.LocalDate;
+import java.time.Period;
 
 /**
  * @author Marius Veltan
@@ -14,19 +14,18 @@ import lombok.Value;
 @Builder
 @AllArgsConstructor
 public class Customer {
-
     private int id;
-    @NotBlank
     private String firstName;
-    @NotBlank
     private String lastName;
-    @Min(value=18)
-    private int age;
-    @Email
+    private LocalDate birthday;
     private String email;
     private String street;
     private String number;
     private String zipCode;
     private String city;
     private String country;
+
+    public Integer getAge() {
+        return Period.between(birthday, LocalDate.now()).getYears();
+    }
 }

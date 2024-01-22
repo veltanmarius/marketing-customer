@@ -11,7 +11,7 @@ import static java.util.Objects.nonNull;
 public class CustomerValidator implements ConstraintValidator<ValidCustomerRequest, CustomerDataRequest> {
 
     @Override
-    public boolean isValid(CustomerDataRequest customerRequest, ConstraintValidatorContext context) {
+    public boolean isValid(final CustomerDataRequest customerRequest, final ConstraintValidatorContext context) {
         if (isValidString(customerRequest.getEmail())) {
             return true;
         }

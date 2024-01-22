@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,13 +30,14 @@ class MarketingCustomerPersistenceTests {
     @Autowired
     private CustomerRepository repository;
 
+    private final LocalDate dateOfBirth = LocalDate.of(1999, 9, 9);
     private CustomerEntity savedEntity;
 
     @BeforeEach
     void setupDb() {
         repository.deleteAll();
 
-        CustomerEntity entity = new CustomerEntity(1, "firstName", "lastName", 18, "email@email.com", "st", "no", "zp", "ci", "co");
+        CustomerEntity entity = new CustomerEntity(1, "firstName", "lastName", dateOfBirth, "email@email.com", "st", "no", "zp", "ci", "co");
         savedEntity = repository.save(entity);
 
         assertEqualsReview(entity, savedEntity);
@@ -43,7 +45,7 @@ class MarketingCustomerPersistenceTests {
 
     @Test
     void create() {
-        CustomerEntity newEntity = new CustomerEntity(1, "firstName", "lastName", 18, "email@email.com", "st", "no", "zp", "ci", "co");
+        CustomerEntity newEntity = new CustomerEntity(1, "firstName", "lastName", dateOfBirth, "email@email.com", "st", "no", "zp", "ci", "co");
         repository.save(newEntity);
 
         CustomerEntity foundEntity = repository.findById(newEntity.getId()).get();
@@ -149,7 +151,7 @@ class MarketingCustomerPersistenceTests {
         assertEquals(expectedEntity.getVersion(),   actualEntity.getVersion());
         assertEquals(expectedEntity.getFirstName(), actualEntity.getFirstName());
         assertEquals(expectedEntity.getLastName(),  actualEntity.getLastName());
-        assertEquals(expectedEntity.getAge(),       actualEntity.getAge());
+        assertEquals(expectedEntity.getBirthday(),       actualEntity.getBirthday());
         assertEquals(expectedEntity.getEmail(),     actualEntity.getEmail());
         assertEquals(expectedEntity.getStreet(),    actualEntity.getStreet());
         assertEquals(expectedEntity.getNumber(),    actualEntity.getNumber());

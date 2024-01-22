@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.LocalDate;
+
 /**
  * @author Marius Veltan
  */
@@ -30,7 +32,7 @@ public final class CustomerEntity extends AbstractEntity {
     @Column(name="last_name")
     @NotNull
     private String lastName;
-    private Integer age;
+    private LocalDate birthday;
     private String email;
     private String street;
     private String number;
@@ -43,12 +45,12 @@ public final class CustomerEntity extends AbstractEntity {
         version = 0;
     }
 
-    public CustomerEntity(Integer id, String firstName, String lastName, Integer age, String email, String street, String number, String zipCode, String city, String country) {
+    public CustomerEntity(Integer id, String firstName, String lastName, LocalDate birthday, String email, String street, String number, String zipCode, String city, String country) {
         version = 0;
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.age = age;
+        this.birthday = birthday;
         this.email = email;
         this.street = street;
         this.number = number;

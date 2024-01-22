@@ -14,6 +14,7 @@ import ro.veltanmarius.mkcustomer.model.mapper.CustomerMapper;
 import ro.veltanmarius.mkcustomer.repository.CustomerRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Marius Veltan
@@ -65,13 +66,15 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> getAllCustomers() {
-        return customerRepository.findAll().stream().map(customerMapper::entityToApi).toList();
+        return customerRepository.findAll().stream()
+                .map(customerMapper::entityToApi).toList();
     }
 
     @Override
     public List<Customer> findCustomersExactMatch(String firstName, String lastName) {
         log.debug("getCustomersByName: {} or {}", firstName, lastName);
-        return customerRepository.findCustomerByFirstNameOrLastName(firstName, lastName).stream().map(customerMapper::entityToApi).toList();
+        return customerRepository.findCustomerByFirstNameOrLastName(firstName, lastName).stream()
+                .map(customerMapper::entityToApi).toList();
     }
 
     @Override
@@ -81,6 +84,7 @@ public class CustomerServiceImpl implements CustomerService {
             log.debug("searchCustomersByName: No values for parameters firstName and lastName, all customers will be returned");
             return getAllCustomers();
         }
-        return customerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(firstName, lastName).stream().map(customerMapper::entityToApi).toList();
+        return customerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(firstName, lastName).stream()
+                .map(customerMapper::entityToApi).toList();
     }
 }

@@ -12,6 +12,8 @@ import ro.veltanmarius.mkcustomer.repository.CustomerRepository;
 import ro.veltanmarius.mkcustomer.rest.model.CustomerCreateRequest;
 import ro.veltanmarius.mkcustomer.service.CustomerServiceImpl;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -29,20 +31,22 @@ class CustomerServiceImplTest {
     @InjectMocks
     private CustomerServiceImpl customerService;
 
+    private final LocalDate dateOfBirth = LocalDate.of(1999, 9, 9);
+
     private CustomerEntity getExpectedCustomerEntity() {
-        return new CustomerEntity(1, "firstName", "lastName", 18, "email@email.com", "st", "no", "zp", "ci", "co");
+        return new CustomerEntity(1, "firstName", "lastName", dateOfBirth, "email@email.com", "st", "no", "zp", "ci", "co");
     }
 
     private CustomerEntity getInitialCustomerEntity() {
-        return new CustomerEntity(null, "firstName", "lastName", 18, "email@email.com", "st", "no", "zp", "ci", "co");
+        return new CustomerEntity(null, "firstName", "lastName", dateOfBirth, "email@email.com", "st", "no", "zp", "ci", "co");
     }
 
     private CustomerCreateRequest getCustomerCreateRequest() {
-        return new CustomerCreateRequest("firstName", "lastName", 18, "email@email.com", "st", "no", "zp", "ci", "co");
+        return new CustomerCreateRequest("firstName", "lastName", dateOfBirth, "email@email.com", "st", "no", "zp", "ci", "co");
     }
 
     private Customer getExpectedCustomer() {
-        return new Customer(1, "firstName", "lastName", 18, "email@email.com", "st", "no", "zp", "ci", "co");
+        return new Customer(1, "firstName", "lastName", dateOfBirth, "email@email.com", "st", "no", "zp", "ci", "co");
     }
 
     @Test

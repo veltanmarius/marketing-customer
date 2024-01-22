@@ -5,6 +5,9 @@ import ro.veltanmarius.mkcustomer.model.Customer;
 import ro.veltanmarius.mkcustomer.model.entity.CustomerEntity;
 import ro.veltanmarius.mkcustomer.rest.model.CustomerCreateRequest;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 /**
  * @author Marius Veltan
  */
@@ -16,7 +19,7 @@ public final class CustomerMapper {
                 .id(entity.getId())
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
-                .age(entity.getAge())
+                .birthday(entity.getBirthday())
                 .email(entity.getEmail())
                 .street(entity.getStreet())
                 .number(entity.getNumber())
@@ -31,7 +34,7 @@ public final class CustomerMapper {
         customerEntity.setId(api.getId());
         customerEntity.setFirstName(api.getFirstName());
         customerEntity.setLastName(api.getLastName());
-        customerEntity.setAge(api.getAge());
+        customerEntity.setBirthday(api.getBirthday());
         customerEntity.setEmail(api.getEmail());
         customerEntity.setStreet(api.getStreet());
         customerEntity.setNumber(api.getNumber());
@@ -45,7 +48,7 @@ public final class CustomerMapper {
         CustomerEntity customerEntity = new CustomerEntity();
         customerEntity.setFirstName(api.getFirstName());
         customerEntity.setLastName(api.getLastName());
-        customerEntity.setAge(api.getAge());
+        customerEntity.setBirthday(api.getBirthday());
         customerEntity.setEmail(api.getEmail());
         customerEntity.setStreet(api.getStreet());
         customerEntity.setNumber(api.getNumber());

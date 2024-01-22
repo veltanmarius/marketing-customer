@@ -7,22 +7,25 @@ import ro.veltanmarius.mkcustomer.model.entity.CustomerEntity;
 import ro.veltanmarius.mkcustomer.model.mapper.CustomerMapper;
 import ro.veltanmarius.mkcustomer.rest.model.CustomerCreateRequest;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CustomerMapperTest {
 
-    CustomerMapper customerMapper = new CustomerMapper();
+    private final CustomerMapper customerMapper = new CustomerMapper();
+    private final LocalDate dateOfBirth = LocalDate.of(1999, 9, 9);
     @Test
     void mapperCustomerTests() {
-        Customer customer = new Customer(1, "fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
-        CustomerEntity customerEntity = new CustomerEntity(1, "fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
+        Customer customer = new Customer(1, "fn", "ln", dateOfBirth, "e@x.ro", "st", "no", "zp", "ci", "co");
+        CustomerEntity customerEntity = new CustomerEntity(1, "fn", "ln", dateOfBirth, "e@x.ro", "st", "no", "zp", "ci", "co");
         Assertions.assertThat(customerMapper.apiToEntity(customer)).isEqualTo(customerEntity);
 
         Customer c = customerMapper.entityToApi(customerEntity);
         assertEquals(c.getId(), customer.getId());
         assertEquals(c.getFirstName(), customer.getFirstName());
         assertEquals(c.getLastName(), customer.getLastName());
-        assertEquals(c.getAge(), customer.getAge());
+        assertEquals(c.getBirthday(), customer.getBirthday());
         assertEquals(c.getEmail(), customer.getEmail());
         assertEquals(c.getStreet(), customer.getStreet());
         assertEquals(c.getNumber(), customer.getNumber());
@@ -33,10 +36,10 @@ public class CustomerMapperTest {
 
     @Test
     void mapperCustomerCreateRequestTests() {
-        CustomerCreateRequest customer = new CustomerCreateRequest("fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
+        CustomerCreateRequest customer = new CustomerCreateRequest("fn", "ln", dateOfBirth, "e@x.ro", "st", "no", "zp", "ci", "co");
         CustomerEntity initialCustomerEntity = customerMapper.apiToEntity(customer);
         initialCustomerEntity.setId(1);
-        CustomerEntity expectedCustomerEntity = new CustomerEntity(1, "fn", "ln", 18, "e@x.ro", "st", "no", "zp", "ci", "co");
+        CustomerEntity expectedCustomerEntity = new CustomerEntity(1, "fn", "ln", dateOfBirth, "e@x.ro", "st", "no", "zp", "ci", "co");
         Assertions.assertThat(initialCustomerEntity).isEqualTo(expectedCustomerEntity);
     }
 }
