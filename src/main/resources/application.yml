@@ -9,6 +9,15 @@ logging:
     root: INFO
     ro.veltanmarius: DEBUG
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      show-details: always
+
 spring:
   h2:
     console.enabled: true
