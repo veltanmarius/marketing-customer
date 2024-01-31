@@ -25,7 +25,7 @@ import ro.veltanmarius.mkcustomer.repository.CustomerRepository;
 @DataJpaTest
 @Transactional(propagation = NOT_SUPPORTED)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class MarketingCustomerPersistenceTests {
+class CustomerPersistenceTests {
 
     @Autowired
     private CustomerRepository repository;
@@ -151,7 +151,7 @@ class MarketingCustomerPersistenceTests {
         assertEquals(expectedEntity.getVersion(),   actualEntity.getVersion());
         assertEquals(expectedEntity.getFirstName(), actualEntity.getFirstName());
         assertEquals(expectedEntity.getLastName(),  actualEntity.getLastName());
-        assertEquals(expectedEntity.getBirthday(),       actualEntity.getBirthday());
+        assertEquals(expectedEntity.getBirthday(),  actualEntity.getBirthday());
         assertEquals(expectedEntity.getEmail(),     actualEntity.getEmail());
         assertEquals(expectedEntity.getStreet(),    actualEntity.getStreet());
         assertEquals(expectedEntity.getNumber(),    actualEntity.getNumber());
